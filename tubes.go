@@ -5,17 +5,17 @@ import (
 	"time"
 )
 
-// Struktur InventoryItem
+
 type InventoryItem struct {
 	ID   int
 	Name string
 }
 
-// Fungsi utama
 func main() {
 	var targetID int
 	var opsi int
 
+	
 	inventory := make([]InventoryItem, 1000000)
 	for i := 0; i < 1000000; i++ {
 		inventory[i] = InventoryItem{ID: i + 1, Name: fmt.Sprintf("Item %d", i+1)}
@@ -34,7 +34,7 @@ func main() {
 	if opsi == 1 {
 		hasil = iterativeSearch(inventory, targetID)
 	} else if opsi == 2 {
-		hasil = linearSearchByID(inventory, len(inventory), targetID)
+		hasil = rekursifSearch(inventory, 0, targetID)
 	} else {
 		fmt.Println("Opsi tidak valid")
 		return
@@ -43,14 +43,15 @@ func main() {
 	
 	duration := time.Since(start).Nanoseconds()
 
-	
 	if hasil {
 		fmt.Println("Ketemu")
 	} else {
 		fmt.Println("Tidak ketemu")
 	}
+
 	fmt.Printf("Waktu eksekusi: %d ns\n", duration)
 }
+
 
 func iterativeSearch(inventory []InventoryItem, targetID int) bool {
 	for i := 0; i < len(inventory); i++ {
@@ -61,12 +62,12 @@ func iterativeSearch(inventory []InventoryItem, targetID int) bool {
 	return false
 }
 
-
-func linearSearchByID(arr []InventoryItem, size int, key int) bool {
-	if size == 0 {
+func rekursifSearch(arr []InventoryItem, index int, key int) bool {
+	if index >= len(arr) {
 		return false
-	} else if arr[size-1].ID == key {
+	} else if arr[index].ID == key {
 		return true
+	} else {
+		return rekursifSearch(arr, index+1, key)
 	}
-	return linearSearchByID(arr, size-1, key)
 }
